@@ -20,14 +20,10 @@ export const reposSlice = createSlice({
     setIsLoadingRepos: (state, { payload }) => {
       const { isLoadingRepos } = payload;
       state.isLoadingRepos = isLoadingRepos;
-    },
-    setIsCancelRequest: (state, { payload }) => {
-      const { isCancelRequest } = payload;
-      state.isCancelRequest = isCancelRequest;
     }
   },
 });
 
 export const { actions, reducer: reposReducer } = reposSlice;
 
-export const { setRepos, setTotalRepos, setIsLoadingRepos, setIsCancelRequest } = actions;
+export const { setRepos, setTotalRepos, setIsLoadingRepos } = actions;

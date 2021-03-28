@@ -4,8 +4,6 @@ export const useDebounce = (value, timeout) => {
     const [state, setState] = useState(value);
     const [prevState, setPrevState] = useState('');
 
-    console.log({ prevState });
-
     useEffect(() => {
         const handler = setTimeout(() => setState(prevState => {
             setPrevState(prevState);

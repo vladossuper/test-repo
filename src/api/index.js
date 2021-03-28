@@ -10,6 +10,6 @@ const instance = axios.create({
 
 
 export const api = {
-  get: ({ params, path, cancelToken }) => instance.get(path, { params }, { cancelToken }),
+  get: ({ params, path, cancelToken }) => instance.get(path, { params, cancelToken } ),
   post: ({ params, path }) => instance.post(path, params),
 };

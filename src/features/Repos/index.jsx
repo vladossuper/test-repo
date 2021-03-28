@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRepos } from '../../store/actions';
 import { Search } from '../../components/Search';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress, Typography, Button, Switch, FormControlLabel, Box } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { CardItem } from '../../components/CardItem';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -17,27 +17,38 @@ export const Repos = () => {
   const dispatch = useDispatch();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [reposList, setReposList] = useState(null);
+  const [prevReposList, setPrevReposList] = useState(null);
   const [page, setPage] = useState(1);
   const [starsFilter, setStarsFilter] = useState(false);
-
   const { debounceSearch, prevDebounceSearch } = useDebounce(searchQuery, 1000);
+
+  const { repos, totalRepos, isLoadingRepos } = useSelector((state) => state.repos);
+  const pages = useMemo(() => totalRepos && Math.ceil(totalRepos / REPOS_PER_PAGE), [totalRepos]);
 
   useEffect(() => {
     if (debounceSearch.length > 2) {
-      dispatch(fetchRepos({ query: debounceSearch, page, per_page: REPOS_PER_PAGE, stars: starsFilter && 'stars', cancelToken: cancelTokenSource.token }))
+      dispatch(fetchRepos({ query: debounceSearch, page, per_page: REPOS_PER_PAGE, sort: starsFilter && 'stars', cancelToken: cancelTokenSource.token }))
     }
-  }, [ debounceSearch, page, starsFilter ]);
+  }, [ debounceSearch, page, starsFilter, dispatch ]);
 
-  const { repos, totalRepos, isLoadingRepos } = useSelector((state) => state.repos);
+  useEffect(() => {
+    setReposList(prevState => {
+      setPrevReposList(prevState);
+      return repos;
+    });
+  }, [repos]);
 
-  const pages = useMemo(() => totalRepos && Math.ceil(totalRepos / REPOS_PER_PAGE), [totalRepos]);
-
-  const handleSearchQuery = (value) => {
-    setSearchQuery(value);
+  const handleSearchQuery = (e) => {
+    setSearchQuery(e.target.value);
   }
 
   const handleStop = () => {
     cancelTokenSource.cancel();
+  };
+
+  const handlePrevRequest = () => {
+    setReposList(prevReposList);
   }
 
   return (
@@ -45,16 +56,37 @@ export const Repos = () => {
       <Grid container item justify='center' xs={12} className={classes.search}>
         <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} />
       </Grid>
-      <Grid item container justify='center' xs={12}>
+      <Grid item container justify='center' xs={12} className={classes.content}>
         { isLoadingRepos ? 
           <CircularProgress /> : 
-          <Grid item xs={8} >
-            {
-              repos && repos.map((repo) => (
-                <CardItem key={repo.id} repo={repo} />
-              ))
-            }
-          </Grid>
+            <>
+              <Grid item xs={2}>
+                {reposList && (
+                  <Box mt={3}>
+                    <Typography variant='subtitle2'>Sorted by:</Typography>
+                    <FormControlLabel
+                      control={<Switch checked={starsFilter} name='Star' onChange={() => setStarsFilter(!starsFilter)} />}
+                      label='Star'
+                    />
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={8} >
+                {
+                  reposList && reposList.map((repo) => (
+                    <CardItem key={repo.id} repo={repo} />
+                  ))
+                }
+              </Grid>
+              <Grid item container xs={2} justify='flex-end'>
+                {prevDebounceSearch && (
+                  <Box mt={3}>
+                    <Typography variant='subtitle2'>Previous Request:</Typography>
+                    <Button variant='outlined' onClick={handlePrevRequest}>{prevDebounceSearch}</Button>
+                  </Box>
+                )}
+              </Grid>
+            </>
         }
       </Grid>
       <Grid container justify='center' item xs={12}>

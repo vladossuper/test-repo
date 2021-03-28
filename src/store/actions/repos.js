@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { api } from '../../api';
 import { setRepos, setTotalRepos, setIsLoadingRepos } from '../slices/reposSlice';
-
+import { Notification } from '../../utils/NotificationSystem';
 
 export const fetchRepos = ({ query: q, per_page, page, sort, cancelToken }) => async (dispatch) => {
   dispatch(setIsLoadingRepos({ isLoadingRepos: true }));
@@ -13,8 +13,10 @@ export const fetchRepos = ({ query: q, per_page, page, sort, cancelToken }) => a
       dispatch(setRepos({ repos: data.items }));
       dispatch(setTotalRepos({ totalRepos: data.total_count }));
     }
-    console.log(response);
   } catch (error) {
-    console.log(error);
+    dispatch(setIsLoadingRepos({ isLoadingRepos: false }));
+    if (error.message === undefined) {
+      Notification({ type: 'CANCEL_REQUEST_ERROR' });
+    }
   }
 };

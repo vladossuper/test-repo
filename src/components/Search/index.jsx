@@ -1,27 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Paper, InputBase, IconButton, Button } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Paper, InputBase, Button } from '@material-ui/core';
 import { searchStyles } from './useStyles';
-import { useDispatch } from 'react-redux';
-import { setIsCancelRequest } from '../../store/slices/reposSlice';
 
 export const Search = ({ handleSearchQuery, handleStop }) => {
     const classes = searchStyles();
-    const dispatch = useDispatch();
 
     return (
-        <Paper component="form" className={classes.root}>
+        <Paper component='form' className={classes.root} onSubmit={(e) => e.preventDefault()}>
             <InputBase
                 className={classes.input}
-                placeholder="Search Github Repos"
+                placeholder='Search Github Repos'
                 inputProps={{ 'aria-label': 'search github repos' }}
-                onChange={(e) => handleSearchQuery(e.target.value)}
+                onChange={handleSearchQuery}
             />
-            <IconButton type="submit" className={classes.iconButton} aria-label="search">
-                <SearchIcon />
-            </IconButton>
-            <Button onClick={() => handleStop()}>Stop</Button>
+            <Button onClick={handleStop}>Stop</Button>
         </Paper>
     )
 };
