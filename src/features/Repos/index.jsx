@@ -56,6 +56,9 @@ export const Repos = () => {
       <Grid container item justify='center' xs={12} className={classes.search}>
         <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} />
       </Grid>
+      <Grid container item justify='center' xs={12}>
+        {(totalRepos && totalRepos > 0) && <Typography variant='h6' align='center'>{totalRepos} repository results</Typography> }
+      </Grid>
       <Grid item container justify='center' xs={12} className={classes.content}>
         { isLoadingRepos ? 
           <CircularProgress /> : 
@@ -73,13 +76,15 @@ export const Repos = () => {
               </Grid>
               <Grid item xs={8} >
                 {
-                  reposList && reposList.map((repo) => (
-                    <CardItem key={repo.id} repo={repo} />
-                  ))
+                  reposList ? 
+                    reposList.map((repo) => (
+                      <CardItem key={repo.id} repo={repo} />
+                    )) : 
+                    <Typography variant='h5' align='center'>There is nothing... Can you search repo?</Typography>
                 }
               </Grid>
               <Grid item container xs={2} justify='flex-end'>
-                {prevDebounceSearch && (
+                {prevReposList && (
                   <Box mt={3}>
                     <Typography variant='subtitle2'>Previous Request:</Typography>
                     <Button variant='outlined' onClick={handlePrevRequest}>{prevDebounceSearch}</Button>
