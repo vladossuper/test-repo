@@ -56,9 +56,11 @@ export const Repos = () => {
       <Grid container item justify='center' xs={12} className={classes.search}>
         <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} />
       </Grid>
-      <Grid container item justify='center' xs={12}>
-        {(totalRepos && totalRepos > 0) && <Typography variant='h6' align='center'>{totalRepos} repository results</Typography> }
-      </Grid>
+      {(totalRepos && totalRepos > 0) &&
+        <Grid container item justify='center' xs={12}>
+          <Typography variant='h6' align='center'>{totalRepos} repository results</Typography>
+        </Grid>
+      }
       <Grid item container justify='center' xs={12} className={classes.content}>
         { isLoadingRepos ? 
           <CircularProgress /> : 
@@ -76,12 +78,13 @@ export const Repos = () => {
               </Grid>
               <Grid item xs={8} >
                 {
-                  reposList ? 
+                  (reposList && reposList.length > 0) && 
                     reposList.map((repo) => (
                       <CardItem key={repo.id} repo={repo} />
-                    )) : 
-                    <Typography variant='h5' align='center'>There is nothing... Can you search repo?</Typography>
-                }
+                  ))
+                } 
+                {!reposList && <Typography variant='h5' align='center'>There is nothing... Search for the repo.</Typography>}
+                {(reposList && reposList.length === 0) && <Typography variant='h5' align='center'>No repos with this name.</Typography>}
               </Grid>
               <Grid item container xs={2} justify='flex-end'>
                 {prevReposList && (
@@ -95,7 +98,7 @@ export const Repos = () => {
         }
       </Grid>
       <Grid container justify='center' item xs={12}>
-        { pages && <Pagination count={pages} page={page} onChange={(_, value) => setPage(value)} /> }
+        { (reposList && reposList.length > 0) && <Pagination count={pages} page={page} onChange={(_, value) => setPage(value)} /> }
       </Grid>
     </Grid>
   );
