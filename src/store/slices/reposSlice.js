@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const reposSlice = createSlice({
   name: 'repos',
   initialState: {
-    repos: null,
+    repos: {},
     totalRepos: null,
     isLoadingRepos: false,
     isCancelRequest: false

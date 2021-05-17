@@ -3,10 +3,10 @@ import { api } from '../../api';
 import { setRepos, setTotalRepos, setIsLoadingRepos } from '../slices/reposSlice';
 import { Notification } from '../../utils/NotificationSystem';
 
-export const fetchRepos = ({ query: q, per_page, page, sort, cancelToken }) => async (dispatch) => {
+export const fetchRepos = ({ query: q, per_page, page, sort }) => async (dispatch) => {
   dispatch(setIsLoadingRepos({ isLoadingRepos: true }));
   try {
-    const response = await api.get({ path: '/search/repositories', params: { q, per_page, sort, page }, cancelToken });
+    const response = await api.get({ path: '/search/repositories', params: { q, per_page, sort, page } });
     const { status, data } = response;
     if (status === 200) {  
       dispatch(setIsLoadingRepos({ isLoadingRepos: false }));

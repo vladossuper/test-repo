@@ -28,7 +28,7 @@ export const Repos = () => {
 
   useEffect(() => {
     if (debounceSearch.length > 2) {
-      dispatch(fetchRepos({ query: debounceSearch, page, per_page: REPOS_PER_PAGE, sort: starsFilter && 'stars', cancelToken: cancelTokenSource.token }))
+      dispatch(fetchRepos({ query: debounceSearch, page, per_page: REPOS_PER_PAGE, sort: starsFilter && 'stars' }))
     }
   }, [ debounceSearch, page, starsFilter, dispatch ]);
 
@@ -54,6 +54,7 @@ export const Repos = () => {
   return (
     <Grid container spacing={3}>
       <Grid container item justify='center' xs={12} className={classes.search}>
+        {searchQuery}
         <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} />
       </Grid>
       {(totalRepos && totalRepos > 0) &&
