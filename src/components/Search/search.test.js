@@ -1,6 +1,6 @@
 import { Search } from './index';
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 
 const handleSearchQuery = jest.fn();
 const handleStop = jest.fn()

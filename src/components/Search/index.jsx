@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Paper, InputBase, Button } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 import { searchStyles } from './useStyles';
 
 export const Search = ({ handleSearchQuery, handleStop }) => {
