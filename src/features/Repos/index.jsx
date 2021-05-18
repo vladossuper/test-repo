@@ -55,7 +55,7 @@ export const Repos = () => {
     <Grid container spacing={3}>
       <Grid container item justify='center' xs={12} className={classes.search}>
         {searchQuery}
-        <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} />
+        <Search handleSearchQuery={handleSearchQuery} handleStop={handleStop} searchQuery={searchQuery} />
       </Grid>
       {(totalRepos && totalRepos > 0) &&
         <Grid container item justify='center' xs={12}>

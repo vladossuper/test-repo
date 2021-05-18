@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, InputBase, Button } from '@material-ui/core';
 import { searchStyles } from './useStyles';
@@ -6,13 +6,20 @@ import { searchStyles } from './useStyles';
 export const Search = ({ handleSearchQuery, handleStop }) => {
     const classes = searchStyles();
 
+    const [search, setSearch] = useState('');
+
+    const searchHandler = (e) => {
+        handleSearchQuery(e);
+        setSearch(e.target.value);
+    }
+
     return (
         <Paper component='form' className={classes.root} onSubmit={(e) => e.preventDefault()}>
-            <InputBase
+            <input
                 className={classes.input}
                 placeholder='Search Github Repos'
-                inputProps={{ 'aria-label': 'search github repos' }}
-                onChange={handleSearchQuery}
+                onChange={searchHandler}
+                value={search}
             />
             <Button onClick={handleStop}>Stop</Button>
         </Paper>
